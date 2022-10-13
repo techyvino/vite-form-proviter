@@ -4,6 +4,7 @@ import FieldArray from "./components/FieldArray";
 import { useEffect, useState } from "react";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import Tick from './assets/ticksvg.svg'
 
 const App = () => {
 
@@ -16,6 +17,13 @@ const App = () => {
       type: 'text',
       placeholder: 'User name',
       disabled: false,
+      inputStyleProps: {
+        borderColor: '#198754',
+        backgroundImage: `url(${Tick})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "right calc(0.375em + 0.1875rem) center",
+        backgroundSize: 'calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)'
+      },
       validations: {
         required: true,
       }
@@ -42,16 +50,16 @@ const App = () => {
       disabled: false,
     },
     {
-      name: 'save',
-      label: 'save2',
-      type: 'checkbox',
-      disabled: false,
-    },
-    {
       name: 'mobile',
       options: ["Android", "Apple"],
       type: 'radio',
       disabled: false,
+    },
+    {
+      name: 'user',
+      label: 'User',
+      options: ["Android", "Apple"],
+      type: 'normalSelect',
     }
   ];
 
@@ -63,9 +71,9 @@ const App = () => {
   }
 
   const schema = yup.object({
-    username: yup.string().required(),
-    password: yup.string().min(8).required(),
-    email: yup.string().email().required(),
+    username: yup.string(),
+    password: yup.string().min(8),
+    email: yup.string().email(),
   }).required();
 
   const form = useForm({
@@ -94,7 +102,7 @@ const App = () => {
       <div className="card">
         <div className="card-body">
           <FormProvider form={form}>
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <form className="needs-validation" noValidate onSubmit={handleSubmit(onSubmit)}>
               <FieldArray fields={fields} />
               <button className="btn btn-primary px-4" type="submit">Save</button>
             </form>

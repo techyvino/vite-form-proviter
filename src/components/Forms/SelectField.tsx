@@ -1,4 +1,4 @@
-import { CheckBoxInput, Input, RadioInput } from "./FormInputs";
+import { CheckBoxInput, Input, NormalSelectInput, RadioInput } from "./FormInputs";
 import './formStyles.scss'
 
 export const formTypes = {
@@ -11,6 +11,7 @@ export const formTypes = {
     number: 'number',
     checkbox: 'checkbox',
     radio: 'radio',
+    normalSelect: 'normalSelect',
 }
 
 const SelectField = (props: any) => {
@@ -27,6 +28,8 @@ const SelectField = (props: any) => {
             return <CheckBoxInput {...props} />
         case formTypes.radio:
             return <RadioInput {...props} />
+        case formTypes.normalSelect:
+            return <NormalSelectInput {...props} />
         default:
             return <p className="text-danger">Invalid Field</p>;
     }

@@ -2,12 +2,13 @@ export const Input = ({
     name,
     type,
     label,
-    icon = '',
+    icon = "",
     iconProps = {},
     validations,
     form,
     className = "mb-3",
     labelProps = {},
+    inputStyleProps = {},
     ...rest
 }: any) => {
     const {
@@ -19,12 +20,15 @@ export const Input = ({
         <div className={`Icon-inside ${className}`}>
             <label htmlFor={name} className="form-label" {...labelProps}>
                 {label}
-                {(validations?.required || rest?.required) && <span className="text-danger">*</span>}
+                {(validations?.required || rest?.required) && (
+                    <span className="text-danger">*</span>
+                )}
             </label>
             <input
-                className={`form-control ${icon ? "ps-5" : ""}`}
+                className={`icon_tick form-control ${icon ? "ps-5" : ""}`}
                 type={type}
                 id={name}
+                style={inputStyleProps}
                 {...register(name, { ...validations })}
                 {...rest}
                 aria-invalid={errors[name] ? "true" : "false"}
@@ -33,7 +37,9 @@ export const Input = ({
                 <i className={`icon ${icon}`} />
             </span>
             {errors?.[name] && (
-                <p className="text-danger mt-1">{errors[name]?.message?.toString() || "This field is required."}</p>
+                <p className="text-danger mt-1">
+                    {errors[name]?.message?.toString() || "This field is required."}
+                </p>
             )}
         </div>
     );
@@ -68,7 +74,11 @@ export const CheckBoxInput = ({
                 {label}
                 {validations?.required && <span className="text-danger">*</span>}
             </label>
-            {errors[name] && <p className="text-danger">{errors[name]["message"] || "This field is required."}</p>}
+            {errors[name] && (
+                <p className="text-danger">
+                    {errors[name]["message"] || "This field is required."}
+                </p>
+            )}
         </div>
     );
 };
@@ -120,4 +130,54 @@ export const RadioInput = ({
     );
 };
 
+export const NormalSelectInput = ({
+    name,
+    type,
+    options,
+    label,
+    validations,
+    form,
+    className = "mb-3",
+    labelProps = {},
+    ...rest
+}: any) => {
+    const {
+        register,
+        formState: { errors },
+    } = form;
 
+    return (
+        <>
+            <div className={`${className}`}>
+                <label className="form-check-label mb-2" htmlFor={name}>
+                    {label}
+                </label>
+                <select
+                    className={`form-select`}
+                    name={name}
+                    id={name}
+                    aria-invalid={errors[name] ? "true" : "false"}
+                    {...rest}
+                >
+                    {Array.isArray(options) &&
+                        options.map((value, idx) => (
+                            <option
+                                key={`options_${idx}`}
+                                id={value}
+                                className=""
+                                value={value}
+                                {...register(name, { ...validations })}
+                            >
+                                {value}
+                            </option>
+                        ))}
+                </select>
+                {errors?.[name] && (
+                    <p className="text-danger mt-1">
+                        {errors[name]?.message?.toString() || "This field is required."}
+                    </p>
+                )}
+            </div>
+        </>
+    );
+};
