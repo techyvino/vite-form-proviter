@@ -19,7 +19,7 @@ export const Input = ({
         <div className={`Icon-inside ${className}`}>
             <label htmlFor={name} className="form-label" {...labelProps}>
                 {label}
-                {validations?.required && <span className="text-danger">*</span>}
+                {(validations?.required || rest?.required) && <span className="text-danger">*</span>}
             </label>
             <input
                 className={`form-control ${icon ? "ps-5" : ""}`}
@@ -80,7 +80,7 @@ export const RadioInput = ({
     label,
     validations,
     form,
-    className = "mb-3",
+    className = "d-flex flex-wrap gap-4",
     labelProps = {},
     ...rest
 }: any) => {
@@ -90,8 +90,8 @@ export const RadioInput = ({
     } = form;
 
     return (
-        <div className={`${className}`}>
-            <div className="">
+        <div className="mb-3">
+            <div className={`${className}`}>
                 {Array.isArray(options) &&
                     options.map((value, idx) => (
                         <div key={`check_${idx}`} className="form-check">
@@ -111,7 +111,6 @@ export const RadioInput = ({
                         </div>
                     ))}
             </div>
-
             {errors?.[name] && (
                 <p className="text-danger mt-1">
                     {errors[name]?.message?.toString() || "This field is required."}

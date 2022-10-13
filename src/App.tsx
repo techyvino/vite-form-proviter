@@ -2,6 +2,8 @@ import FormProvider from "./components/FormProvider";
 import { useForm } from "react-hook-form"
 import FieldArray from "./components/FieldArray";
 import { useEffect, useState } from "react";
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const App = () => {
 
@@ -14,16 +16,17 @@ const App = () => {
       type: 'text',
       placeholder: 'User name',
       disabled: false,
+      validations: {
+        required: true,
+      }
     },
     {
       name: 'email',
       label: 'Email Id',
       type: 'email',
       placeholder: 'Email',
+      required: true,
       disabled: false,
-      validations: {
-        required: true,
-      }
     },
     {
       name: 'password',
@@ -53,13 +56,21 @@ const App = () => {
   ];
 
   const init = {
-    username: 'vinoth',
-    email: 'test@gmail.com',
-    password: 'password'
+    username: '',
+    email: '',
+    password: '',
+    show_password: false,
   }
 
+  const schema = yup.object({
+    username: yup.string().required(),
+    password: yup.string().min(8).required(),
+    email: yup.string().email().required(),
+  }).required();
+
   const form = useForm({
-    defaultValues: init
+    defaultValues: init,
+    resolver: yupResolver(schema)
   });
 
   const { handleSubmit, watch } = form;
@@ -71,11 +82,11 @@ const App = () => {
   const showPassword = watch("show_password");
 
 
+  // const showPassword = watch('email');
 
   useEffect(() => {
     setShow(!!showPassword);
   }, [showPassword])
-
 
   return (
     <div className="container">
