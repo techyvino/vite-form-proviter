@@ -1,32 +1,95 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import FormProvider from "./components/FormProvider";
+import { useForm } from "react-hook-form"
+import FieldArray from "./components/FieldArray";
+import { useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+
+  const [show, setShow] = useState<boolean>(false)
+
+  const fields = [
+    {
+      name: 'username',
+      label: 'User Name',
+      type: 'text',
+      placeholder: 'User name',
+      disabled: false,
+    },
+    {
+      name: 'email',
+      label: 'Email Id',
+      type: 'email',
+      placeholder: 'Email',
+      disabled: false,
+      validations: {
+        required: true,
+      }
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      type: show ? "text" : "password",
+      placeholder: 'Password',
+      disabled: false,
+    },
+    {
+      name: 'show_password',
+      label: 'Show password',
+      type: 'checkbox',
+      disabled: false,
+    },
+    {
+      name: 'save',
+      label: 'save2',
+      type: 'checkbox',
+      disabled: false,
+    },
+    {
+      name: 'mobile',
+      options: ["Android", "Apple"],
+      type: 'radio',
+      disabled: false,
+    }
+  ];
+
+  const init = {
+    username: 'vinoth',
+    email: 'test@gmail.com',
+    password: 'password'
+  }
+
+  const form = useForm({
+    defaultValues: init
+  });
+
+  const { handleSubmit, watch } = form;
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  }
+
+  const showPassword = watch("show_password");
+
+
+
+  useEffect(() => {
+    setShow(!!showPassword);
+  }, [showPassword])
+
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+    <div className="container">
+      <h1 className='fw-bold'>Dynamic Form</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <div className="card-body">
+          <FormProvider form={form}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}>
+              <FieldArray fields={fields} />
+              <button className="btn btn-primary px-4" type="submit">Save</button>
+            </form>
+          </FormProvider>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
