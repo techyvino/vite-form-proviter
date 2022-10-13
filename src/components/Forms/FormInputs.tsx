@@ -97,8 +97,10 @@ export const RadioInput = ({
                 {
                     Array.isArray(options) && options.map((value, idx) => (
                         <div key={`check_${idx}`} className="form-check">
-                            <input className="form-check-input" type="radio" name={name} id={value} />
-                            <label className="form-check-label" htmlFor="flexRadioDefault1">
+                            <input className="form-check-input" type="radio" id={value}  {...register(name, { ...validations })}
+                                {...rest}
+                                aria-invalid={errors[name] ? "true" : "false"} />
+                            <label className="form-check-label" htmlFor={value}>
                                 {value}
                             </label>
                         </div>
