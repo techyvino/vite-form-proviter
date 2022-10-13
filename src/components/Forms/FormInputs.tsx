@@ -89,28 +89,33 @@ export const RadioInput = ({
         formState: { errors },
     } = form;
 
-    console.log('options', options)
-
     return (
         <div className={`${className}`}>
             <div className="">
-                {
-                    Array.isArray(options) && options.map((value, idx) => (
+                {Array.isArray(options) &&
+                    options.map((value, idx) => (
                         <div key={`check_${idx}`} className="form-check">
-                            <input className="form-check-input" type="radio" id={value}  {...register(name, { ...validations })}
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={name}
+                                value={value}
+                                id={value}
+                                {...register(name, { ...validations })}
                                 {...rest}
-                                aria-invalid={errors[name] ? "true" : "false"} />
+                                aria-invalid={errors[name] ? "true" : "false"}
+                            />
                             <label className="form-check-label" htmlFor={value}>
                                 {value}
                             </label>
                         </div>
-                    ))
-                }
-
+                    ))}
             </div>
 
             {errors?.[name] && (
-                <p className="text-danger mt-1">{errors[name]?.message?.toString() || "This field is required."}</p>
+                <p className="text-danger mt-1">
+                    {errors[name]?.message?.toString() || "This field is required."}
+                </p>
             )}
         </div>
     );
