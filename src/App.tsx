@@ -17,13 +17,7 @@ const App = () => {
       type: 'text',
       placeholder: 'User name',
       disabled: false,
-      inputStyleProps: {
-        borderColor: '#198754',
-        backgroundImage: `url(${Tick})`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "right calc(0.375em + 0.1875rem) center",
-        backgroundSize: 'calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)'
-      },
+      icon: Tick,
       validations: {
         required: true,
       }
@@ -56,10 +50,28 @@ const App = () => {
       disabled: false,
     },
     {
-      name: 'user',
-      label: 'User',
-      options: ["Android", "Apple"],
+      name: 'select',
+      label: 'Select',
+      options: [{
+        value: 'android',
+        label: 'Android',
+      }, {
+        value: 'apple',
+        label: 'Apple',
+      }],
       type: 'normalSelect',
+    },
+    {
+      name: 'react-select',
+      label: 'React Select',
+      options: [{
+        value: 'android',
+        label: 'Android',
+      }, {
+        value: 'apple',
+        label: 'Apple',
+      }],
+      type: 'select',
     }
   ];
 
@@ -74,6 +86,12 @@ const App = () => {
     username: yup.string(),
     password: yup.string().min(8),
     email: yup.string().email(),
+    ["react-select"]: yup.array().of(
+      yup.object().shape({
+        value: yup.string(),
+        label: yup.boolean(),
+      })
+    ).required()
   }).required();
 
   const form = useForm({

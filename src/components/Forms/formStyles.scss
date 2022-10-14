@@ -1,5 +1,11 @@
 input[aria-invalid="true"] {
-  border: 2px solid #dc3545;
+  border: 2px solid #dc3545 !important;
+}
+
+.react-select.error {
+  .select__control {
+    border: 2px solid #dc3545 !important;
+  }
 }
 
 .Icon-inside {

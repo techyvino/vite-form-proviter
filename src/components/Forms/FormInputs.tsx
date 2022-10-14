@@ -1,9 +1,12 @@
+import { Controller } from 'react-hook-form';
+import Select from 'react-select';
+
 export const Input = ({
     name,
     type,
     label,
     icon = "",
-    iconProps = {},
+    iconStyles = {},
     validations,
     form,
     className = "mb-3",
@@ -16,6 +19,14 @@ export const Input = ({
         formState: { errors },
     } = form;
 
+    const iconStyle = {
+        backgroundImage: `url(${icon})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "right calc(0.375em + 0.1875rem) center",
+        backgroundSize: 'calc(0.75em + 0.375rem) calc(0.75em + 0.375rem)',
+        ...iconStyles
+    }
+
     return (
         <div className={`Icon-inside ${className}`}>
             <label htmlFor={name} className="form-label" {...labelProps}>
@@ -25,17 +36,14 @@ export const Input = ({
                 )}
             </label>
             <input
-                className={`icon_tick form-control ${icon ? "ps-5" : ""}`}
+                className={`form-control`}
                 type={type}
                 id={name}
-                style={inputStyleProps}
+                style={icon ? iconStyle : inputStyleProps}
                 {...register(name, { ...validations })}
                 {...rest}
                 aria-invalid={errors[name] ? "true" : "false"}
             />
-            <span {...iconProps}>
-                <i className={`icon ${icon}`} />
-            </span>
             {errors?.[name] && (
                 <p className="text-danger mt-1">
                     {errors[name]?.message?.toString() || "This field is required."}
@@ -160,15 +168,15 @@ export const NormalSelectInput = ({
                     {...rest}
                 >
                     {Array.isArray(options) &&
-                        options.map((value, idx) => (
+                        options.map((option, idx) => (
                             <option
                                 key={`options_${idx}`}
-                                id={value}
+                                id={option?.value}
                                 className=""
-                                value={value}
+                                value={option?.value}
                                 {...register(name, { ...validations })}
                             >
-                                {value}
+                                {option?.label}
                             </option>
                         ))}
                 </select>
@@ -178,6 +186,45 @@ export const NormalSelectInput = ({
                     </p>
                 )}
             </div>
+        </>
+    );
+};
+
+export const ReactSelectInput = ({
+    name,
+    options,
+    validations,
+    form,
+    className = "mb-3",
+    ...rest
+}: any) => {
+    const {
+        control,
+        formState: { errors },
+    } = form;
+
+    return (
+        <>
+            <Controller
+                name={name}
+                control={control}
+                render={({ field }: any) => {
+                    return <Select
+                        {...field}
+                        className={`react-select ${errors[name] ? "error" : ""} ${className}`}
+                        classNamePrefix="select"
+                        name={name}
+                        options={options || []}
+                        isMulti
+                        {...rest}
+                    />
+                }}
+            />
+            {errors?.[name] && (
+                <p className="text-danger mt-1">
+                    {errors[name]?.message?.toString() || "This field is required."}
+                </p>
+            )}
         </>
     );
 };
