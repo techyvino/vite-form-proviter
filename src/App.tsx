@@ -89,7 +89,7 @@ const App = () => {
     ["react-select"]: yup.array().of(
       yup.object().shape({
         value: yup.string(),
-        label: yup.boolean(),
+        label: yup.string(),
       })
     ).required()
   }).required();
